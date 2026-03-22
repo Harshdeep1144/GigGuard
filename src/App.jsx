@@ -1,22 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Plans from './pages/Plans';
 import About from './pages/About';
-
-/**
- * Harsh Deep's GigGuard Application Entry Point
- * Handles Page Navigation Routing via State
- */
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Profile from './pages/Profile';
+import Claims from './pages/Claims';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [userName] = useState('Harsh Deep');
+  const [activeTab, setActiveTab] = useState('home');
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
 
-  // Simple Router Implementation
+  // Restore user session on load
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    const savedToken = localStorage.getItem('token');
+    if (savedUser && savedToken) {
+      setUser(JSON.parse(savedUser));
+      setToken(savedToken);
+    }
+  }, []);
+
+  const setAuth = (userData, userToken) => {
+    setUser(userData);
+    setToken(userToken);
+    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('token', userToken);
+  };
+
+  const logout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    setActiveTab('login');
+  };
+
   const renderContent = () => {
     switch (activeTab) {
+      case 'home':
+        return <Home setActiveTab={setActiveTab} />;
       case 'dashboard':
         return <Dashboard />;
       case 'plans':
@@ -24,26 +51,27 @@ export default function App() {
       case 'about':
         return <About />;
       case 'claims':
-        return (
-          <div className="py-20 text-center">
-            <h2 className="text-2xl font-bold text-white">Claims Engine</h2>
-            <p className="text-slate-500 mt-2">No active claims found. AI monitoring is active.</p>
-          </div>
-        );
+        return <Claims />;
+      case 'login':
+        return <Login setAuth={setAuth} setActiveTab={setActiveTab} />;
+      case 'signup':
+        return <Signup setAuth={setAuth} setActiveTab={setActiveTab} />;
+      case 'profile':
+        return <Profile user={user} token={token} logout={logout} setUser={setUser} />;
       default:
-        return <Dashboard />;
+        return <Home setActiveTab={setActiveTab} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col">
+    <div className="min-h-screen bg-slate-950 flex flex-col selection:bg-indigo-500/30 selection:text-indigo-100 text-slate-200">
       <Navbar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
-        userName={userName} 
+        user={user} 
       />
       
-      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+      <main className={`flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full ${activeTab === 'home' ? 'pt-0 pb-10' : 'py-10'}`}>
         {renderContent()}
       </main>
 

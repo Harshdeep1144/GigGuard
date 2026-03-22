@@ -9,7 +9,7 @@ const Dashboard = () => {
       value: "98%", 
       icon: Activity, 
       trend: "+2%", 
-      color: "from-emerald-500/20 to-emerald-600/10",
+      bgColor: "bg-emerald-500/10",
       iconColor: "text-emerald-400",
       borderColor: "border-emerald-500/20"
     },
@@ -18,25 +18,25 @@ const Dashboard = () => {
       value: "Low", 
       icon: BarChart3, 
       trend: "Secure", 
-      color: "from-indigo-500/20 to-indigo-600/10",
+      bgColor: "bg-indigo-500/10",
       iconColor: "text-indigo-400",
       borderColor: "border-indigo-500/20"
     },
     { 
       label: "Protection Pool", 
-      value: "$1,200", 
+      value: "₹120,400", 
       icon: Shield, 
       trend: "Active", 
-      color: "from-blue-500/20 to-blue-600/10",
+      bgColor: "bg-blue-500/10",
       iconColor: "text-blue-400",
       borderColor: "border-blue-500/20"
     },
     { 
       label: "Available Funds", 
-      value: "$124.50", 
+      value: "₹4,250", 
       icon: Wallet, 
       trend: "Ready", 
-      color: "from-purple-500/20 to-purple-600/10",
+      bgColor: "bg-purple-500/10",
       iconColor: "text-purple-400",
       borderColor: "border-purple-500/20"
     }
@@ -52,58 +52,61 @@ const Dashboard = () => {
     <div className="space-y-6 sm:space-y-8 md:space-y-10 animate-fadeIn">
       {/* Header */}
       <div className="space-y-2 pb-2 sm:pb-4">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white">Dashboard</h1>
-        <p className="text-base sm:text-lg text-slate-400">Real-time monitoring of your gig platforms with AI-powered protection.</p>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold text-white tracking-tight">Dashboard</h1>
+        <p className="text-base sm:text-lg text-slate-400 font-medium">Real-time monitoring of your gig platforms with AI-powered protection.</p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
         {stats.map((s, i) => (
           <Card 
             key={i}
-            className={`border-l-4 ${s.borderColor} bg-gradient-to-br ${s.color}`}
+            className={`border-t-2 ${s.borderColor}`}
           >
             <div className="flex justify-between items-start mb-6">
-              <div className={`p-3 rounded-xl bg-gradient-to-br ${s.color}`}>
+              <div className={`p-3 rounded-xl border ${s.bgColor} ${s.borderColor}`}>
                 <s.icon className={`w-5 h-5 ${s.iconColor}`} />
               </div>
-              <span className={`text-xs font-bold px-3 py-1.5 rounded-full ${s.iconColor} bg-slate-800/50`}>
+              <span className={`text-xs font-bold px-3 py-1.5 rounded-full bg-slate-800 ${s.iconColor} border ${s.borderColor}`}>
                 {s.trend}
               </span>
             </div>
-            <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest mb-2">{s.label}</p>
-            <h2 className="text-3xl font-bold text-white">{s.value}</h2>
+            <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1">{s.label}</p>
+            <h2 className="text-3xl font-extrabold text-white tracking-tight">{s.value}</h2>
           </Card>
         ))}
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-8 pt-4 sm:pt-6 md:pt-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 pt-4">
         {/* Disruption Log */}
-        <Card className="lg:col-span-2 border-indigo-500/20">
-          <div className="flex items-center justify-between mb-6 pb-6 border-b border-slate-700/50">
+        <Card className="lg:col-span-2">
+          <div className="flex items-center justify-between mb-6 pb-6 border-b border-slate-800">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-indigo-500/20">
+              <div className="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
                 <Zap className="w-5 h-5 text-indigo-400" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white">Activity Log</h3>
-                <p className="text-xs text-slate-400 mt-1">Last 24 hours</p>
+                <h3 className="text-lg font-bold text-white tracking-wide">Activity Log</h3>
+                <p className="text-xs font-semibold text-slate-500 mt-0.5">Last 24 hours</p>
               </div>
             </div>
-            <TrendingUp className="w-5 h-5 text-emerald-400" />
+            <TrendingUp className="w-5 h-5 text-emerald-500" />
           </div>
           
           <div className="space-y-3">
             {activities.map((activity, i) => (
-              <div key={i} className="flex items-start gap-4 p-4 rounded-xl bg-slate-800/30 border border-slate-700/30 hover:border-slate-600/50 transition-all duration-300">
+              <div key={i} className="flex items-start gap-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 hover:border-indigo-500/40 hover:bg-slate-800 transition-all duration-300">
                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <div className="w-2 h-2 flex-shrink-0 rounded-full" 
-                    style={{backgroundColor: activity.status === 'warning' ? '#f59e0b' : '#10b981'}}
+                  <div className={`w-2 h-2 flex-shrink-0 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.5)]`}
+                    style={{
+                      backgroundColor: activity.status === 'warning' ? '#f59e0b' : '#10b981',
+                      boxShadow: activity.status === 'warning' ? '0 0 10px rgba(245, 158, 11, 0.5)' : '0 0 10px rgba(16, 185, 129, 0.5)'
+                    }}
                   ></div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm text-slate-200">{activity.message}</p>
-                    <p className="text-xs text-slate-500 mt-1 font-mono">2026-03-20 {activity.time}</p>
+                    <p className="text-sm font-semibold text-slate-200">{activity.message}</p>
+                    <p className="text-[10px] text-slate-500 mt-1 font-bold tracking-widest uppercase">2026-03-20 {activity.time}</p>
                   </div>
                 </div>
               </div>
@@ -112,34 +115,37 @@ const Dashboard = () => {
         </Card>
 
         {/* Alert Card */}
-        <Card className="border-l-4 border-amber-500/50 bg-gradient-to-br from-amber-500/10 to-orange-600/10">
+        <Card className="border-t-2 border-amber-500/50 bg-gradient-to-br from-slate-900 to-slate-900/40">
           <div className="flex items-start gap-3 mb-4">
-            <div className="p-2 rounded-lg bg-amber-500/20 flex-shrink-0">
-              <AlertTriangle className="w-5 h-5 text-amber-400" />
+            <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 flex-shrink-0">
+              <AlertTriangle className="w-5 h-5 text-amber-500" />
             </div>
-            <h3 className="font-bold text-white text-lg">Alert</h3>
+            <h3 className="font-bold text-white text-lg tracking-wide">Active Alert</h3>
           </div>
-          <p className="text-slate-300 text-sm leading-relaxed">
-            Heavy rain detected in your area. Your income protection triggers have been adjusted to <span className="text-amber-300 font-semibold">75% coverage</span> for the next 4 hours.
+          <p className="text-slate-300 text-sm leading-relaxed font-medium">
+            Heavy rain detected in your area. Your income protection triggers have been adjusted to <span className="text-amber-400 font-extrabold bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 rounded">75% coverage</span> for the next 4 hours.
           </p>
-          <div className="mt-4 flex items-center gap-2 text-xs text-amber-300 font-medium">
-            <Clock className="w-4 h-4" />
-            <span>Expires at 18:05</span>
+          <div className="mt-5 pt-4 border-t border-slate-800 flex items-center justify-between">
+             <div className="flex items-center gap-2 text-xs text-amber-500 font-bold">
+               <Clock className="w-4 h-4" />
+               <span>Expires at 18:05</span>
+             </div>
+             <button className="text-xs font-bold bg-slate-800 text-amber-500 px-3 py-1.5 rounded-lg border border-slate-700 hover:border-amber-500/30 transition shadow-sm">Details</button>
           </div>
         </Card>
       </div>
 
       {/* Quick Stats Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-5 pt-6 sm:pt-8 md:pt-10">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6">
         {[
-          { label: "Active Platforms", value: "5", color: "text-blue-400" },
-          { label: "Monthly Earnings", value: "$4.2k", color: "text-emerald-400" },
-          { label: "Protection Active", value: "24/7", color: "text-indigo-400" },
+          { label: "Active", value: "5", color: "text-blue-400" },
+          { label: "Earnings", value: "₹42k", color: "text-emerald-400" },
+          { label: "Protection", value: "24/7", color: "text-indigo-400" },
           { label: "Risk Score", value: "12/100", color: "text-emerald-400" }
         ].map((stat, i) => (
-          <Card key={i} className="text-center">
-            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">{stat.label}</p>
-            <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+          <Card key={i} className="text-center py-6">
+            <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mb-2">{stat.label}</p>
+            <p className={`text-3xl font-extrabold tracking-tight ${stat.color}`}>{stat.value}</p>
           </Card>
         ))}
       </div>
