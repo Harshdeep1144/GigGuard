@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Shield, Bell, Menu, X } from 'lucide-react';
+import { Shield, Bell, Menu, X, Sun, Moon } from 'lucide-react';
 
-const Navbar = ({ activeTab, setActiveTab, user }) => {
+const Navbar = ({ activeTab, setActiveTab, user, theme, toggleTheme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -114,6 +114,14 @@ const Navbar = ({ activeTab, setActiveTab, user }) => {
 
           {/* Right section */}
           <div className="flex items-center gap-4">
+            {/* Theme Toggle Button */}
+            <button 
+              onClick={toggleTheme}
+              className="p-2 transition-colors focus:outline-none flex-shrink-0 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/50"
+            >
+              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+
             {/* Notification Bell */}
            {user && (
              <div className="relative hidden sm:block" ref={notificationsRef}>

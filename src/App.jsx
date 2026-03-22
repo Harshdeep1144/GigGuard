@@ -14,6 +14,9 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('home');
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'dark';
+  });
 
   // Restore user session on load
   useEffect(() => {
@@ -24,6 +27,18 @@ export default function App() {
       setToken(savedToken);
     }
   }, []);
+
+  // Update theme class on HTML element
+  useEffect(() => {
+    const root = window.document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
+  };
 
   const setAuth = (userData, userToken) => {
     setUser(userData);
@@ -69,6 +84,8 @@ export default function App() {
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
         user={user} 
+        theme={theme}
+        toggleTheme={toggleTheme}
       />
       
       <main className={`flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full ${activeTab === 'home' ? 'pt-0 pb-10' : 'py-10'}`}>

@@ -15,7 +15,7 @@ export default function Home({ setActiveTab }) {
         <div className="relative z-10 space-y-8 px-4">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tighter max-w-4xl mx-auto leading-tight">
             Gig Work is Unpredictable. <br className="hidden md:block"/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-blue-400 to-indigo-400">Your Income Shouldn't Be.</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-indigo-400">Your Income Shouldn't Be.</span>
           </h1>
           
           <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed">
