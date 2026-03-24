@@ -1,8 +1,31 @@
-import React from 'react';
-import { Shield, Twitter, Github, Linkedin, Mail, ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { Shield, Twitter, Github, Linkedin, Mail, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('idle');
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+    setStatus('loading');
+    try {
+      const res = await fetch('http://localhost:5000/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      if (res.ok) {
+        setStatus('success');
+        setEmail('');
+      } else {
+        setStatus('error');
+      }
+    } catch (err) {
+      setStatus('error');
+    }
+  };
 
   return (
     <footer className="relative mt-20 border-t border-slate-800/50 bg-slate-950/50">
@@ -14,17 +37,35 @@ const Footer = () => {
               <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">Stay Updated</h3>
               <p className="text-slate-400 font-medium">Get real-time alerts about disruptions affecting your income.</p>
             </div>
-            <div className="flex gap-2">
-              <input 
-                type="email" 
-                placeholder="your@email.com" 
-                className="flex-1 px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors shadow-inner"
-              />
-              <button className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-bold rounded-xl border border-indigo-400/30 shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.6)] active:scale-95 transition-all duration-300 flex items-center gap-2">
-                <span className="hidden sm:inline">Subscribe</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
+            <form onSubmit={handleSubscribe} className="flex gap-2 flex-col sm:flex-row">
+              {status === 'success' ? (
+                <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold flex-1">
+                  <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
+                  <span className="text-sm">Subscribe! You will be notified.</span>
+                </div>
+              ) : (
+                <>
+                  <input 
+                    type="email" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={status === 'loading'}
+                    required
+                    placeholder="your@email.com" 
+                    className="flex-1 px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors shadow-inner disabled:opacity-50"
+                  />
+                  <button 
+                    type="submit"
+                    disabled={status === 'loading'}
+                    className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-bold rounded-xl border border-indigo-400/30 shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.6)] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span className="hidden sm:inline">{status === 'loading' ? 'Subscribing...' : 'Subscribe'}</span>
+                    {status !== 'loading' && <ArrowRight className="w-4 h-4" />}
+                  </button>
+                </>
+              )}
+            </form>
+            {status === 'error' && <p className="text-red-400 text-sm mt-2 font-medium">Failed to subscribe. Please try again.</p>}
           </div>
         </div>
       </div>

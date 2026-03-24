@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from './models/User.js';
+import Subscriber from './models/Subscriber.js';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
@@ -191,6 +192,29 @@ app.post('/api/upload', protect, upload.single('image'), (req, res) => {
   const normalizedPath = req.file.path.replace(/\\/g, '/');
   console.log("UPLOAD SUCCESS, SENDING URL:", `/${normalizedPath}`);
   res.json({ imageUrl: `/${normalizedPath}` });
+});
+
+// @desc    Subscribe to updates
+// @route   POST /api/subscribe
+app.post('/api/subscribe', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: 'Email is required' });
+
+    const existingSubscriber = await Subscriber.findOne({ email });
+    if (existingSubscriber) {
+      return res.status(400).json({ message: 'Email is already subscribed' });
+    }
+
+    await Subscriber.create({ email });
+    
+    res.status(200).json({ message: 'Subscribed successfully' });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({ message: 'Email is already subscribed' });
+    }
+    res.status(500).json({ message: error.message });
+  }
 });
 
 // Generate JWT
